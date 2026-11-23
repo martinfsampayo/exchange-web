@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>EXCHANGE · Prototipo web</title>
+<meta name="description" content="Prototipo navegable de la landing page de EXCHANGE.">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'><rect width='64' height='64' rx='14' fill='%23004a44'/><path d='M14 20h6l6 22h20l5-16H24' fill='none' stroke='white' stroke-width='4' stroke-linecap='round' stroke-linejoin='round'/><circle cx='29' cy='49' r='3.5' fill='white'/><circle cx='43' cy='49' r='3.5' fill='white'/></svg>">
+<style>
+  :root { --bg: #1e1e1e; --accent: #0fa294; }
+  * { box-sizing: border-box; }
+  html, body { margin: 0; background: var(--bg); }
+  body { font-family: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif; }
+  #stage { position: relative; width: 100%; max-width: 1280px; margin: 0 auto; line-height: 0; background: #fff; }
+  #stage img { width: 100%; height: auto; display: block; user-select: none; -webkit-user-drag: none; }
+  .hs { position: absolute; display: block; cursor: pointer; border-radius: 6px; outline: none; }
+  .hs:focus-visible { box-shadow: 0 0 0 3px var(--accent); }
+  body.flash .hs { background: rgba(15, 162, 148, .28); box-shadow: inset 0 0 0 2px rgba(15, 162, 148, .9); transition: background .15s; }
+  #stage.fade { animation: fade .25s ease; }
+  @keyframes fade { from { opacity: .35; } to { opacity: 1; } }
+  #bar { position: fixed; right: 16px; bottom: 16px; display: flex; gap: 8px; z-index: 10; opacity: .35; transition: opacity .2s; }
+  #bar:hover, #bar:focus-within { opacity: 1; }
+  #bar button { font: 500 13px/1 inherit; font-family: inherit; color: #fff; background: rgba(0, 0, 0, .7); border: 1px solid rgba(255, 255, 255, .25); border-radius: 999px; padding: 9px 14px; cursor: pointer; }
+  #bar button:hover { background: #004a44; }
+  @media (prefers-reduced-motion: reduce) { #stage.fade { animation: none; } }
+</style>
+</head>
+<body>
+<div id="stage" aria-live="polite"></div>
+<div id="bar">
+  <button id="btn-hint" type="button" title="Mostrar zonas clicables (H)">Ver zonas</button>
+  <button id="btn-home" type="button" title="Volver al inicio (R)">↺ Inicio</button>
+</div>
+<script>
+const DATA = {"start":"landing-page-1-819-10960","screens":{"landing-page-1-819-10960":{"name":"LANDING page 1","img":"img/landing-page-1-819-10960.jpg","w":1280,"h":3953,"hs":[{"x":655,"y":1629,"w":589,"h":402,"to":"landing-page-1008-1361"},{"x":862,"y":2188,"w":377,"h":365,"to":"landing-page-1008-1361"},{"x":452,"y":2188,"w":377,"h":365,"to":"comunidad-960-12075"},{"x":425,"y":544,"w":425,"h":80,"to":"descarga-la-app-1026-1769"},{"x":789,"y":1059,"w":368,"h":65,"to":"favor-login-1281-2454"},{"x":399,"y":1944,"w":199,"h":52,"to":"landing-page-1008-1361"},{"x":125,"y":2460,"w":212,"h":43,"to":"intercambio-1-1075-1883"},{"x":410,"y":1951,"w":178,"h":35,"to":"landing-page-1008-1361"},{"x":421,"y":80,"w":124,"h":44,"to":"intercambio-1-1075-1883"},{"x":574,"y":80,"w":123,"h":44,"to":"comunidad-960-12075"},{"x":1087,"y":82,"w":119,"h":40,"to":"login-979-11385"},{"x":725,"y":80,"w":99,"h":44,"to":"nosotros-888-438"},{"x":1082,"y":90,"w":127,"h":24,"to":"login-979-11385"},{"x":71,"y":92,"w":142,"h":19,"scroll":202}]},"favor-login-1281-2454":{"name":"Favor - login","img":"img/favor-login-1281-2454.jpg","w":1280,"h":832,"hs":[{"x":467,"y":319,"w":347,"h":52,"to":"favor-login-1281-2620"}]},"descarga-la-app-1026-1769":{"name":"DESCARGA LA APP","img":"img/descarga-la-app-1026-1769.jpg","w":1280,"h":1426,"hs":[{"x":71,"y":92,"w":142,"h":19,"to":"landing-page-1-819-10960"}]},"landing-page-1008-1361":{"name":"LANDING PAGE","img":"img/landing-page-1008-1361.jpg","w":1280,"h":3953,"hs":[{"x":68,"y":751,"w":545,"h":692,"to":"landing-page-1013-3152"},{"x":476,"y":1369,"w":112,"h":51,"to":"landing-page-1013-3152"},{"x":421,"y":80,"w":124,"h":44,"to":"intercambio-1-1075-1883"},{"x":574,"y":80,"w":123,"h":44,"to":"comunidad-960-12075"},{"x":1087,"y":82,"w":119,"h":40,"to":"login-979-11385"},{"x":725,"y":80,"w":99,"h":44,"to":"nosotros-888-438"},{"x":71,"y":92,"w":142,"h":19,"to":"landing-page-1-819-10960"},{"x":1162,"y":490,"w":24,"h":12,"to":"comunidad-960-12075"}]},"comunidad-960-12075":{"name":"COMUNIDAD","img":"img/comunidad-960-12075.jpg","w":1280,"h":3812,"hs":[{"x":39,"y":1629,"w":1203,"h":360,"to":"landing-page-1008-1361"},{"x":70,"y":1608,"w":589,"h":402,"to":"landing-page-1008-1361"},{"x":70,"y":1421,"w":406,"h":51,"to":"comunidad-2-989-13193"},{"x":942,"y":1899,"w":238,"h":51,"to":"landing-page-1008-1361"},{"x":1087,"y":82,"w":119,"h":40,"to":"login-979-11385"},{"x":725,"y":80,"w":99,"h":44,"to":"nosotros-888-438"},{"x":71,"y":92,"w":142,"h":19,"to":"landing-page-1-819-10960"},{"x":261,"y":1520,"w":24,"h":12,"to":"comunidad-2-989-13193"}]},"intercambio-1-1075-1883":{"name":"INTERCAMBIO 1","img":"img/intercambio-1-1075-1883.jpg","w":1280,"h":4378,"hs":[{"x":668,"y":1332,"w":545,"h":692,"to":"login-979-11385"},{"x":345,"y":709,"w":287,"h":340,"to":"login-979-11385"},{"x":846,"y":1204,"w":370,"h":49,"to":"intercambio-2-1097-12786"},{"x":574,"y":81,"w":123,"h":44,"to":"comunidad-960-12075"},{"x":1087,"y":83,"w":119,"h":40,"to":"login-979-11385"},{"x":725,"y":81,"w":99,"h":44,"to":"nosotros-888-438"},{"x":1082,"y":91,"w":127,"h":24,"to":"login-979-11385"},{"x":71,"y":93,"w":142,"h":19,"to":"landing-page-1-819-10960"}]},"login-979-11385":{"name":"login","img":"img/login-979-11385.jpg","w":1280,"h":926,"hs":[{"x":467,"y":422,"w":347,"h":52,"to":"login2-1081-2025"},{"x":725,"y":81,"w":99,"h":44,"to":"nosotros-888-438"},{"x":518,"y":438,"w":177,"h":18,"to":"login2-1081-2025"},{"x":71,"y":93,"w":142,"h":19,"to":"landing-page-1-819-10960"}]},"nosotros-888-438":{"name":"Nosotros","img":"img/nosotros-888-438.jpg","w":1280,"h":3597,"hs":[{"x":574,"y":80,"w":123,"h":44,"to":"comunidad-960-12075"},{"x":71,"y":92,"w":142,"h":19,"to":"landing-page-1-819-10960"},{"x":431,"y":90,"w":104,"h":24,"to":"intercambio-1-1075-1883"},{"x":33,"y":86,"w":37,"h":33,"to":"landing-page-1-819-10960"}]},"favor-login-1281-2620":{"name":"Favor - login","img":"img/favor-login-1281-2620.jpg","w":1280,"h":832,"hs":[{"x":463,"y":393,"w":347,"h":53,"to":"favor-login-1281-2653"}]},"landing-page-1013-3152":{"name":"LANDING PAGE","img":"img/landing-page-1013-3152.jpg","w":1280,"h":3953,"hs":[{"x":311,"y":2068,"w":657,"h":51,"to":"landing-page-1013-3581"},{"x":421,"y":80,"w":124,"h":44,"to":"intercambio-1-1075-1883"},{"x":574,"y":80,"w":123,"h":44,"to":"comunidad-960-12075"},{"x":1087,"y":82,"w":119,"h":40,"to":"login-979-11385"},{"x":725,"y":80,"w":99,"h":44,"to":"nosotros-888-438"},{"x":1082,"y":90,"w":127,"h":24,"to":"login-979-11385"},{"x":71,"y":92,"w":142,"h":19,"to":"landing-page-1-819-10960"},{"x":33,"y":86,"w":37,"h":33,"to":"landing-page-1-819-10960"}]},"comunidad-2-989-13193":{"name":"COMUNIDAD 2","img":"img/comunidad-2-989-13193.jpg","w":1280,"h":5394,"hs":[{"x":39,"y":3159,"w":1203,"h":360,"to":"landing-page-1008-1361"},{"x":647,"y":940,"w":428,"h":630,"to":"comunidad-3-989-13853"},{"x":70,"y":3138,"w":589,"h":402,"to":"landing-page-1008-1361"},{"x":459,"y":2625,"w":363,"h":272,"to":"comunidad4-989-14366"},{"x":70,"y":1421,"w":406,"h":51,"to":"comunidad-960-12075"},{"x":942,"y":3429,"w":238,"h":51,"to":"landing-page-1008-1361"},{"x":574,"y":80,"w":123,"h":44,"to":"comunidad-960-12075"},{"x":1087,"y":82,"w":119,"h":40,"to":"login-979-11385"},{"x":725,"y":80,"w":99,"h":44,"to":"nosotros-888-438"},{"x":1082,"y":90,"w":127,"h":24,"to":"login-979-11385"},{"x":71,"y":92,"w":142,"h":19,"to":"landing-page-1-819-10960"},{"x":628,"y":3075,"w":24,"h":12,"to":"comunidad-960-12075"},{"x":1164,"y":1776,"w":24,"h":12,"to":"comunidad-960-12075"}]},"intercambio-2-1097-12786":{"name":"INTERCAMBIO 2","img":"img/intercambio-2-1097-12786.jpg","w":1280,"h":4378,"hs":[{"x":68,"y":2075,"w":545,"h":692,"to":"intercambio-4-1106-2682"},{"x":345,"y":709,"w":287,"h":340,"to":"login-979-11385"},{"x":455,"y":1204,"w":370,"h":49,"to":"intercambio-1-1075-1883"},{"x":574,"y":81,"w":123,"h":44,"to":"comunidad-960-12075"},{"x":1087,"y":83,"w":119,"h":40,"to":"login-979-11385"},{"x":725,"y":81,"w":99,"h":44,"to":"nosotros-888-438"},{"x":1082,"y":91,"w":127,"h":24,"to":"login-979-11385"},{"x":71,"y":93,"w":142,"h":19,"to":"landing-page-1-819-10960"}]},"login2-1081-2025":{"name":"login2","img":"img/login2-1081-2025.jpg","w":1280,"h":926,"hs":[{"x":467,"y":496,"w":347,"h":53,"to":"login3-1123-12673"},{"x":725,"y":81,"w":99,"h":44,"to":"nosotros-888-438"},{"x":518,"y":511,"w":177,"h":18,"to":"login3-1123-12673"},{"x":71,"y":93,"w":142,"h":19,"to":"landing-page-1-819-10960"}]},"favor-login-1281-2653":{"name":"Favor - login","img":"img/favor-login-1281-2653.jpg","w":1280,"h":832,"hs":[{"x":505,"y":486,"w":260,"h":53,"to":"favor-login-1281-2656"}]},"landing-page-1013-3581":{"name":"LANDING PAGE","img":"img/landing-page-1013-3581.jpg","w":1280,"h":2615,"hs":[{"x":754,"y":1307,"w":462,"h":51,"to":"landing-page-1016-3987"},{"x":421,"y":80,"w":124,"h":44,"to":"intercambio-1-1075-1883"},{"x":574,"y":80,"w":123,"h":44,"to":"comunidad-960-12075"},{"x":1087,"y":82,"w":119,"h":40,"to":"login-979-11385"},{"x":725,"y":80,"w":99,"h":44,"to":"nosotros-888-438"},{"x":71,"y":92,"w":142,"h":19,"to":"landing-page-1-819-10960"},{"x":74,"y":235,"w":12,"h":24,"to":"landing-page-1008-1361"}]},"comunidad-3-989-13853":{"name":"COMUNIDAD 3","img":"img/comunidad-3-989-13853.jpg","w":1280,"h":1755,"hs":[{"x":574,"y":80,"w":123,"h":44,"to":"comunidad-960-12075"},{"x":1087,"y":82,"w":119,"h":40,"to":"login-979-11385"},{"x":725,"y":80,"w":99,"h":44,"to":"nosotros-888-438"},{"x":71,"y":92,"w":142,"h":19,"to":"landing-page-1-819-10960"},{"x":1205,"y":526,"w":23,"h":46,"to":"comunidad4-989-14366"}]},"comunidad4-989-14366":{"name":"COMUNIDAD4","img":"img/comunidad4-989-14366.jpg","w":1280,"h":1755,"hs":[{"x":583,"y":887,"w":157,"h":51,"to":"comunidad5-989-14503"},{"x":574,"y":80,"w":123,"h":44,"to":"comunidad-960-12075"},{"x":1087,"y":82,"w":119,"h":40,"to":"login-979-11385"},{"x":725,"y":80,"w":99,"h":44,"to":"nosotros-888-438"},{"x":71,"y":92,"w":142,"h":19,"to":"landing-page-1-819-10960"},{"x":41,"y":526,"w":23,"h":46,"to":"comunidad-3-989-13853"}]},"intercambio-4-1106-2682":{"name":"INTERCAMBIO 4","img":"img/intercambio-4-1106-2682.jpg","w":1280,"h":926,"hs":[{"x":755,"y":629,"w":208,"h":61,"to":"carrito-1110-2041"},{"x":976,"y":629,"w":208,"h":61,"to":"carrito-1110-2041"},{"x":725,"y":81,"w":99,"h":44,"to":"nosotros-888-438"},{"x":71,"y":93,"w":142,"h":19,"to":"landing-page-1-819-10960"}]},"login3-1123-12673":{"name":"login3","img":"img/login3-1123-12673.jpg","w":1280,"h":926,"hs":[{"x":509,"y":589,"w":260,"h":53,"to":"login4-1123-12758"},{"x":725,"y":81,"w":99,"h":44,"to":"nosotros-888-438"},{"x":71,"y":93,"w":142,"h":19,"to":"landing-page-1-819-10960"}]},"favor-login-1281-2656":{"name":"Favor - login","img":"img/favor-login-1281-2656.jpg","w":1280,"h":832,"hs":[],"timer":{"to":"favor-1279-2312","ms":1200}},"landing-page-1016-3987":{"name":"LANDING PAGE","img":"img/landing-page-1016-3987.jpg","w":1280,"h":2615,"hs":[{"x":16,"y":19,"w":96,"h":24,"to":"landing-page-1013-3581"}]},"comunidad5-989-14503":{"name":"COMUNIDAD5","img":"img/comunidad5-989-14503.jpg","w":1280,"h":1755,"hs":[{"x":0,"y":143,"w":1280,"h":1612,"to":"comunidad4-989-14366"},{"x":574,"y":80,"w":123,"h":44,"to":"comunidad-960-12075"},{"x":1087,"y":82,"w":119,"h":40,"to":"login-979-11385"},{"x":725,"y":80,"w":99,"h":44,"to":"nosotros-888-438"},{"x":71,"y":92,"w":142,"h":19,"to":"landing-page-1-819-10960"},{"x":773,"y":284,"w":28,"h":28,"to":"comunidad4-989-14366"}]},"carrito-1110-2041":{"name":"carrito","img":"img/carrito-1110-2041.jpg","w":1280,"h":1421,"hs":[{"x":353,"y":731,"w":234,"h":51,"to":"intercambio-1-1075-1883"},{"x":609,"y":731,"w":156,"h":51,"to":"pago-1-1123-13426"},{"x":725,"y":81,"w":99,"h":44,"to":"nosotros-888-438"},{"x":71,"y":93,"w":142,"h":19,"to":"landing-page-1-819-10960"}]},"login4-1123-12758":{"name":"login4","img":"img/login4-1123-12758.jpg","w":1280,"h":926,"hs":[{"x":725,"y":81,"w":99,"h":44,"to":"nosotros-888-438"},{"x":71,"y":93,"w":142,"h":19,"to":"landing-page-1-819-10960"}],"timer":{"to":"intercambio-3-967-12089","ms":2000}},"favor-1279-2312":{"name":"Favor","img":"img/favor-1279-2312.jpg","w":1280,"h":1698,"hs":[{"x":437,"y":540,"w":425,"h":80,"to":"favor-2-1299-11023"}]},"pago-1-1123-13426":{"name":"pago 1","img":"img/pago-1-1123-13426.jpg","w":1280,"h":1421,"hs":[{"x":82,"y":445,"w":428,"h":51,"to":"pago-2-1145-12740"},{"x":82,"y":675,"w":163,"h":35,"to":"carrito-1110-2041"},{"x":725,"y":81,"w":99,"h":44,"to":"nosotros-888-438"},{"x":71,"y":93,"w":142,"h":19,"to":"landing-page-1-819-10960"}]},"intercambio-3-967-12089":{"name":"INTERCAMBIO 3","img":"img/intercambio-3-967-12089.jpg","w":1280,"h":1430,"hs":[{"x":763,"y":733,"w":214,"h":49,"to":"intercambio-6-1123-13162"},{"x":725,"y":81,"w":99,"h":44,"to":"nosotros-888-438"},{"x":71,"y":93,"w":142,"h":19,"to":"landing-page-1-819-10960"}]},"favor-2-1299-11023":{"name":"Favor 2","img":"img/favor-2-1299-11023.jpg","w":1280,"h":1698,"hs":[{"x":294,"y":414,"w":692,"h":104,"to":"favor-3-1302-2879"},{"x":989,"y":237,"w":27,"h":31,"to":"favor-1279-2312"}]},"pago-2-1145-12740":{"name":"pago 2","img":"img/pago-2-1145-12740.jpg","w":1280,"h":829,"hs":[{"x":607,"y":659,"w":179,"h":51,"to":"pago-6-1241-2419"},{"x":82,"y":675,"w":163,"h":35,"to":"carrito-1110-2041"},{"x":725,"y":81,"w":99,"h":44,"to":"nosotros-888-438"},{"x":71,"y":93,"w":142,"h":19,"to":"landing-page-1-819-10960"}]},"intercambio-6-1123-13162":{"name":"INTERCAMBIO 6","img":"img/intercambio-6-1123-13162.jpg","w":1280,"h":1430,"hs":[{"x":499,"y":506,"w":150,"h":49,"to":"carrito-1110-2041"},{"x":725,"y":81,"w":99,"h":44,"to":"nosotros-888-438"},{"x":71,"y":93,"w":142,"h":19,"to":"landing-page-1-819-10960"},{"x":810,"y":354,"w":31,"h":31,"to":"intercambio-3-967-12089"}]},"favor-3-1302-2879":{"name":"Favor 3","img":"img/favor-3-1302-2879.jpg","w":1280,"h":1698,"hs":[{"x":326,"y":597,"w":214,"h":118,"to":"favor-4-1302-3067"},{"x":989,"y":237,"w":27,"h":31,"to":"favor-2-1299-11023"}]},"pago-6-1241-2419":{"name":"pago 6","img":"img/pago-6-1241-2419.jpg","w":1280,"h":829,"hs":[{"x":725,"y":81,"w":99,"h":44,"to":"nosotros-888-438"},{"x":71,"y":93,"w":142,"h":19,"to":"landing-page-1-819-10960"}],"timer":{"to":"pago-8-1241-13413","ms":500}},"favor-4-1302-3067":{"name":"Favor 4","img":"img/favor-4-1302-3067.jpg","w":1280,"h":1698,"hs":[{"x":339,"y":700,"w":125,"h":52,"to":"favor-5-1302-3255"},{"x":503,"y":701,"w":125,"h":52,"to":"favor-5-1302-3255"},{"x":943,"y":233,"w":27,"h":31,"to":"favor-2-1299-11023"}]},"pago-8-1241-13413":{"name":"pago 8","img":"img/pago-8-1241-13413.jpg","w":1280,"h":829,"hs":[{"x":0,"y":136,"w":1280,"h":693,"to":"pago-3-1145-12951"},{"x":725,"y":81,"w":99,"h":44,"to":"nosotros-888-438"},{"x":71,"y":93,"w":142,"h":19,"to":"landing-page-1-819-10960"}],"timer":{"to":"pago-3-1145-12951","ms":500}},"favor-5-1302-3255":{"name":"Favor 5","img":"img/favor-5-1302-3255.jpg","w":1280,"h":1698,"hs":[{"x":266,"y":907,"w":728,"h":104,"to":"favor-6-1302-3442"},{"x":956,"y":219,"w":27,"h":31,"to":"favor-2-1299-11023"}]},"pago-3-1145-12951":{"name":"pago 3","img":"img/pago-3-1145-12951.jpg","w":1280,"h":829,"hs":[{"x":607,"y":659,"w":179,"h":51,"to":"pago-4-1145-13202"},{"x":725,"y":81,"w":99,"h":44,"to":"nosotros-888-438"},{"x":71,"y":93,"w":142,"h":19,"to":"landing-page-1-819-10960"}]},"favor-6-1302-3442":{"name":"Favor 6","img":"img/favor-6-1302-3442.jpg","w":1280,"h":1504,"hs":[{"x":469,"y":761,"w":320,"h":246,"to":"favor-7-1305-2727"},{"x":469,"y":1020,"w":320,"h":246,"to":"favor-7-1305-2727"},{"x":138,"y":761,"w":319,"h":246,"to":"favor-7-1305-2727"},{"x":138,"y":1020,"w":319,"h":246,"to":"favor-7-1305-2727"},{"x":801,"y":761,"w":318,"h":246,"to":"favor-7-1305-2727"},{"x":801,"y":1020,"w":318,"h":246,"to":"favor-7-1305-2727"},{"x":298,"y":1393,"w":323,"h":51,"to":"favor-1279-2312"},{"x":649,"y":1393,"w":323,"h":51,"to":"favor-8-1305-2884"}]},"pago-4-1145-13202":{"name":"pago 4","img":"img/pago-4-1145-13202.jpg","w":1280,"h":829,"hs":[{"x":725,"y":81,"w":99,"h":44,"to":"nosotros-888-438"},{"x":71,"y":93,"w":142,"h":19,"to":"landing-page-1-819-10960"}],"timer":{"to":"pago-5-1145-13303","ms":2500}},"favor-7-1305-2727":{"name":"Favor 7","img":"img/favor-7-1305-2727.jpg","w":1280,"h":1504,"hs":[{"x":286,"y":1396,"w":323,"h":51,"to":"favor-1279-2312"},{"x":637,"y":1396,"w":323,"h":51,"to":"favor-8-1305-2884"}]},"favor-8-1305-2884":{"name":"Favor 8","img":"img/favor-8-1305-2884.jpg","w":1280,"h":832,"hs":[],"timer":{"to":"favor-1279-2312","ms":500}},"pago-5-1145-13303":{"name":"pago 5","img":"img/pago-5-1145-13303.jpg","w":1280,"h":829,"hs":[{"x":725,"y":81,"w":99,"h":44,"to":"nosotros-888-438"},{"x":71,"y":93,"w":142,"h":19,"to":"landing-page-1-819-10960"}]}}};
+const stage = document.getElementById('stage');
+let timer = null, flashT = null;
+
+function flash() {
+  document.body.classList.add('flash');
+  clearTimeout(flashT);
+  flashT = setTimeout(() => document.body.classList.remove('flash'), 700);
+}
+
+function go(id) { if (DATA.screens[id]) location.hash = id; }
+
+function render(id, scrollY) {
+  const s = DATA.screens[id] || DATA.screens[DATA.start];
+  clearTimeout(timer);
+  document.title = 'EXCHANGE · ' + s.name;
+  stage.innerHTML = '';
+  stage.classList.remove('fade'); void stage.offsetWidth; stage.classList.add('fade');
+
+  const img = new Image();
+  img.src = s.img; img.alt = s.name; img.width = s.w; img.height = s.h; img.draggable = false;
+  stage.appendChild(img);
+
+  for (const h of s.hs) {
+    const a = document.createElement('a');
+    a.className = 'hs';
+    a.style.left = (h.x / s.w * 100) + '%';
+    a.style.top = (h.y / s.h * 100) + '%';
+    a.style.width = (h.w / s.w * 100) + '%';
+    a.style.height = (h.h / s.h * 100) + '%';
+    if (h.to) {
+      a.href = '#' + h.to;
+      a.setAttribute('aria-label', 'Ir a ' + DATA.screens[h.to].name);
+      new Image().src = DATA.screens[h.to].img; // precarga
+    } else if (h.scroll != null) {
+      a.href = 'javascript:void 0';
+      a.setAttribute('aria-label', 'Desplazar');
+      a.addEventListener('click', e => { e.preventDefault(); scrollToFrameY(s, h.scroll); });
+    }
+    stage.appendChild(a);
+  }
+
+  if (s.timer) {
+    new Image().src = DATA.screens[s.timer.to].img;
+    timer = setTimeout(() => go(s.timer.to), s.timer.ms);
+  }
+  window.scrollTo(0, scrollY || 0);
+}
+
+function scrollToFrameY(s, y) {
+  const r = stage.getBoundingClientRect();
+  window.scrollTo({ top: window.scrollY + r.top + y * (r.width / s.w), behavior: 'smooth' });
+}
+
+stage.addEventListener('click', e => { if (!e.target.closest('.hs')) flash(); });
+document.getElementById('btn-home').addEventListener('click', () => go(DATA.start));
+document.getElementById('btn-hint').addEventListener('click', flash);
+document.addEventListener('keydown', e => {
+  if (e.metaKey || e.ctrlKey || e.altKey) return;
+  if (e.key === 'r' || e.key === 'R') go(DATA.start);
+  if (e.key === 'h' || e.key === 'H') flash();
+});
+window.addEventListener('hashchange', () => render(location.hash.slice(1)));
+render(location.hash.slice(1) || DATA.start);
+</script>
+</body>
+</html>
